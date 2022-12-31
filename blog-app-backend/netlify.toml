@@ -1,0 +1,8 @@
+[build]
+    command = "mvn clean && mvn package && java -jar target/blog-app-backend-0.0.1-SNAPSHOT.jar"
+    publish = "target/"
+
+[build.environment]
+JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
+[[plugins]]
+        package = "netlify-plugin-maven"
