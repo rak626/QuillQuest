@@ -6,7 +6,7 @@ import com.rakesh.blog.security.JWTAuthRequest;
 import com.rakesh.blog.security.JWTAuthResponse;
 import com.rakesh.blog.security.JWTTokenHelper;
 import com.rakesh.blog.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,19 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@AllArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private JWTTokenHelper jwtTokenHelper;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserService userService;
+    private final JWTTokenHelper jwtTokenHelper;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> createToken(@RequestBody JWTAuthRequest request) throws Exception {
@@ -59,17 +53,17 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username, password);
 
-        try{
+        try {
             this.authenticationManager.authenticate(authenticationToken);
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             System.out.println("Unable to do Authentication ...... ");
             throw new ApiException("Invalid password.......");
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto userDto){
+    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
         UserDto newUserDto = this.userService.registerNewUser(userDto);
-        return new ResponseEntity<UserDto>(newUserDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(newUserDto, HttpStatus.CREATED);
     }
 }

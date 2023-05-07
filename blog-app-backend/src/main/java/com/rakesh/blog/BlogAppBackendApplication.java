@@ -3,7 +3,6 @@ package com.rakesh.blog;
 import com.rakesh.blog.config.AppConstants;
 import com.rakesh.blog.entities.Role;
 import com.rakesh.blog.repositories.RoleRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,11 +13,14 @@ import java.util.List;
 @SpringBootApplication
 public class BlogAppBackendApplication implements CommandLineRunner {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
+	private final RoleRepo roleRepo;
 
-	@Autowired
-	private RoleRepo roleRepo;
+	public BlogAppBackendApplication(PasswordEncoder passwordEncoder, RoleRepo roleRepo) {
+		this.passwordEncoder = passwordEncoder;
+		this.roleRepo = roleRepo;
+	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(BlogAppBackendApplication.class, args);
@@ -40,7 +42,7 @@ public class BlogAppBackendApplication implements CommandLineRunner {
 
 			List<Role> roles = List.of(role, role1);
 			List<Role> savedRoles = this.roleRepo.saveAll(roles);
-			savedRoles.stream().forEach(r -> System.out.println(r.getName()));
+			savedRoles.forEach(r -> System.out.println(r.getName()));
 		}catch (Exception e){
 			e.printStackTrace();
 		}

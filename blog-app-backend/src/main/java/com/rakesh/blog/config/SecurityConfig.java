@@ -3,7 +3,6 @@ package com.rakesh.blog.config;
 import com.rakesh.blog.security.CustomUserDetailService;
 import com.rakesh.blog.security.JWTAuthenticationEntryPoint;
 import com.rakesh.blog.security.JWTAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String[] PUBLIC_URLS = {
-            "/api/v1/auth/**" ,
+            "/api/v1/auth/**",
             "/v3/api-docs",
             "/v2/api-docs",
             "/swagger-resources",
@@ -35,14 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**"
     };
 
-    @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private final CustomUserDetailService customUserDetailService;
+    private final JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Autowired
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
+    public SecurityConfig(CustomUserDetailService customUserDetailService, JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint, JWTAuthenticationFilter jwtAuthenticationFilter) {
+        this.customUserDetailService = customUserDetailService;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration)
-            throws Exception{
+            throws Exception {
         return configuration.getAuthenticationManager();
     }
 
