@@ -1,4 +1,4 @@
-# Blog Application
+# QuillQuest
 
 This is a Java application for a blog website, where you can 
 create, upload and delete different type of Post as well as 
